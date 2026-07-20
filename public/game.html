@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Entropy House is an interactive, physics-flavored escape room where thermodynamics has gone beautifully wrong."
+    />
+    <meta name="theme-color" content="#071014" />
+    <title>Entropy House — A thermodynamic escape room</title>
+    <link rel="preload" href="assets/entropy-house-hero.png" as="image" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="cursor-glow" aria-hidden="true"></div>
+
+    <main id="app">
+      <section class="landing" id="landing" aria-labelledby="landing-title">
+        <div class="landing__image" aria-hidden="true"></div>
+        <div class="landing__scrim" aria-hidden="true"></div>
+
+        <header class="landing__nav">
+          <a class="brand" href="#" aria-label="Entropy House home">
+            <span class="brand__mark" aria-hidden="true">ΔS</span>
+            <span>ENTROPY HOUSE</span>
+          </a>
+          <div class="landing__status"><span></span> Anomaly active</div>
+        </header>
+
+        <div class="landing__content">
+          <div class="eyebrow"><span>Case 02—714</span><i></i><span>New York, Tuesday-ish</span></div>
+          <h1 id="landing-title">The house has<br /><em>forgotten the rules.</em></h1>
+          <p class="landing__lede">
+            Heat climbs toward the cold. Broken glass reassembles at midnight.
+            Every Tuesday, entropy resets. Tonight, the house chose you.
+          </p>
+
+          <div class="landing__actions">
+            <button class="button button--primary" id="begin-game">
+              <span>Enter the house</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </button>
+            <button class="button button--ghost" id="how-to-play">How it works</button>
+          </div>
+
+          <div class="landing__meta" aria-label="Game details">
+            <div><small>Duration</small><strong>15–25 min</strong></div>
+            <div><small>Difficulty</small><strong>Curious mind</strong></div>
+            <div><small>Knowledge</small><strong>No degree required</strong></div>
+          </div>
+        </div>
+
+        <div class="landing__aside" aria-hidden="true">
+          <span>Scroll is futile</span><i></i><b>01</b>
+        </div>
+      </section>
+
+      <section class="game" id="game" aria-label="Entropy House game" hidden>
+        <header class="game-header">
+          <button class="brand brand--button" id="home-button" aria-label="Return to title screen">
+            <span class="brand__mark" aria-hidden="true">ΔS</span>
+            <span>ENTROPY HOUSE</span>
+          </button>
+
+          <div class="game-header__case">
+            <small>ACTIVE CASE</small>
+            <strong>THE TUESDAY REVERSAL</strong>
+          </div>
+
+          <div class="game-header__tools">
+            <div class="timer" aria-label="Elapsed time">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v5l3 2M9 2h6"/></svg>
+              <span id="timer">00:00</span>
+            </div>
+            <button class="icon-button" id="sound-button" aria-label="Turn ambient sound on" aria-pressed="false">
+              <svg class="sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5ZM15 9c1.3 1.7 1.3 4.3 0 6M18 6c3.3 3.3 3.3 8.7 0 12"/></svg>
+              <svg class="sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5ZM16 10l5 5M21 10l-5 5"/></svg>
+            </button>
+            <button class="icon-button" id="notes-button" aria-label="Open case notes">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6zM9 8h6M9 12h6M9 16h4"/></svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="game-layout">
+          <nav class="room-nav" aria-label="Rooms">
+            <div class="room-nav__label">HOUSE PLAN <span id="progress-label">0 / 4</span></div>
+            <div class="progress-track"><span id="progress-bar"></span></div>
+            <div id="room-list" class="room-list"></div>
+            <div class="stability-card">
+              <div class="stability-card__top"><span>REALITY STABILITY</span><strong id="stability-value">12%</strong></div>
+              <div class="stability-bars" id="stability-bars" aria-hidden="true"></div>
+              <p>Restore each room to strengthen the arrow of time.</p>
+            </div>
+          </nav>
+
+          <section class="room" id="room-stage" aria-live="polite"></section>
+
+          <aside class="case-panel" id="case-panel">
+            <div class="case-panel__header">
+              <div><small>FIELD NOTES</small><strong id="case-title">CASE 02—714</strong></div>
+              <button class="icon-button case-panel__close" id="notes-close" aria-label="Close case notes">×</button>
+            </div>
+
+            <div class="observation">
+              <div class="observation__stamp">OBSERVATION</div>
+              <p id="observation-text"></p>
+            </div>
+
+            <div class="concept-card">
+              <span class="concept-card__icon" aria-hidden="true">φ</span>
+              <div><small>PHYSICS IN PLAY</small><strong id="concept-title"></strong></div>
+              <p id="concept-text"></p>
+            </div>
+
+            <div class="objective">
+              <small>CURRENT OBJECTIVE</small>
+              <p id="objective-text"></p>
+            </div>
+
+            <button class="hint-button" id="hint-button">
+              <span class="hint-button__bulb">?</span>
+              <span><small>STUCK?</small><strong>Reveal a field hint</strong></span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <div class="hint" id="hint" hidden></div>
+
+            <button class="reset-link" id="reset-game">Reset investigation</button>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="modal" id="intro-modal">
+      <button class="modal__close" data-close-dialog aria-label="Close">×</button>
+      <div class="modal__glyph">∴</div>
+      <small>INVESTIGATOR ORIENTATION</small>
+      <h2>The laws are clues.</h2>
+      <p>
+        Explore four anomalous rooms. Observe what is broken, use the real physics
+        principle in your field notes, and stabilize the house one puzzle at a time.
+      </p>
+      <div class="modal__steps">
+        <div><b>01</b><span><strong>Observe</strong><small>Read the room before touching anything.</small></span></div>
+        <div><b>02</b><span><strong>Reason</strong><small>Every answer follows a real physical law.</small></span></div>
+        <div><b>03</b><span><strong>Restore</strong><small>Solve all four rooms and reopen the front door.</small></span></div>
+      </div>
+      <button class="button button--primary modal__action" data-close-dialog>I understand</button>
+    </dialog>
+
+    <dialog class="modal confirm-modal" id="reset-modal">
+      <button class="modal__close" data-close-dialog aria-label="Close">×</button>
+      <div class="modal__glyph">↺</div>
+      <small>RESET INVESTIGATION</small>
+      <h2>Disturb the timeline?</h2>
+      <p>This clears every solved room, hint, and recorded time from this device.</p>
+      <div class="confirm-modal__actions">
+        <button class="button button--ghost" data-close-dialog>Keep progress</button>
+        <button class="button button--danger" id="confirm-reset">Reset everything</button>
+      </div>
+    </dialog>
+
+    <dialog class="modal victory-modal" id="victory-modal">
+      <div class="victory-modal__halo" aria-hidden="true"></div>
+      <div class="modal__glyph">ΔS</div>
+      <small>CASE CLOSED</small>
+      <h2>Time moves forward again.</h2>
+      <p>
+        The frost retreats. The clocks agree. Somewhere upstairs, a cup of tea cools
+        normally—and it has never felt so miraculous.
+      </p>
+      <div class="victory-stats">
+        <div><small>ESCAPE TIME</small><strong id="final-time">00:00</strong></div>
+        <div><small>ROOMS RESTORED</small><strong>4 / 4</strong></div>
+        <div><small>HINTS CONSULTED</small><strong id="final-hints">0</strong></div>
+      </div>
+      <button class="button button--primary modal__action" id="revisit-house">Revisit the house</button>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
