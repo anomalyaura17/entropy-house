@@ -1,5 +1,6 @@
 node_modules/
 .next/
 dist/
+.netlify/
 .DS_Store
 npm-debug.log*
